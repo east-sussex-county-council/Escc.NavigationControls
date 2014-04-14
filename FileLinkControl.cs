@@ -16,7 +16,6 @@ namespace EsccWebTeam.NavigationControls
     /// </summary>
     public class FileLinkControl : WebControl
     {
-        private static List<string> downloadFormats = new List<string>() { "pdf", "doc", "dot", "docm", "rtf", "docx", "xls", "xlt", "xlsx", "csv", "ppt", "pps", "pptx", "mp3", "wmv", "mov", "wma", "exe", "zip", "gif", "jpg", "png" };
         private int fileSize;
         private bool linkTextHasTrailingSpace;
 
@@ -155,15 +154,12 @@ namespace EsccWebTeam.NavigationControls
         /// </remarks>
         public static string ConvertExtensionToFileType(string extension, bool recognisedFileTypesOnly)
         {
-            NameValueCollection fileTypeNames = ConfigurationManager.GetSection("EsccWebTeam.NavigationControls/FileTypeNames") as NameValueCollection;
-            if (fileTypeNames != null && fileTypeNames[extension] != null)
+            var recognisedFileType = ConvertExtensionToFileType(extension);
+            if (String.IsNullOrEmpty(recognisedFileType) && !recognisedFileTypesOnly)
             {
-                return fileTypeNames[extension];
+                recognisedFileType = extension.ToUpper(CultureInfo.CurrentCulture);
             }
-            else
-            {
-                return recognisedFileTypesOnly ? String.Empty : extension.ToUpper(CultureInfo.CurrentCulture);
-            }
+            return recognisedFileType;
         }
 
         /// <summary>
@@ -173,7 +169,15 @@ namespace EsccWebTeam.NavigationControls
         /// <remarks>See <see cref="ConvertExtensionToFileType(string,bool)"/>.</remarks>
         public static string ConvertExtensionToFileType(string extension)
         {
-            return ConvertExtensionToFileType(extension, true);
+            var fileTypeNames = ConfigurationManager.GetSection("EsccWebTeam.NavigationControls/FileTypeNames") as NameValueCollection;
+            if (fileTypeNames != null && fileTypeNames[extension] != null)
+            {
+                return fileTypeNames[extension];
+            }
+            else
+            {
+                return String.Empty;
+            }
         }
 
         /// <summary>
@@ -196,7 +200,10 @@ namespace EsccWebTeam.NavigationControls
             if (String.IsNullOrEmpty(FileExtension)) FileExtension = Path.GetExtension(this.NavigateUrl.ToString()); // Set extension from URL if not set already
             if (String.IsNullOrEmpty(FileExtension)) return;
             FileExtension = FileExtension.ToLowerInvariant().Substring(1); // Remove the "."
-            if (!downloadFormats.Contains(FileExtension)) return;
+
+            // Is it a file type we want to display?
+            var fileType = ConvertExtensionToFileType(FileExtension, RecognisedFileTypesOnly);
+            if (String.IsNullOrEmpty(fileType)) return;
 
             // If it is, add a "document" class to the link
             if (this.UseDefaultClasses)
