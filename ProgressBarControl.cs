@@ -119,7 +119,7 @@ namespace EsccWebTeam.NavigationControls
         private void GetStagesFromConfig()
         {
             // Get config: it's optional
-            NameValueCollection config = ConfigurationManager.GetSection("EsccWebTeam.NavigationControls/ProgressBar") as NameValueCollection;
+            NameValueCollection config = ConfigurationManager.GetSection("EsccWebTeam.NavigationControls/" + ConfigSectionName) as NameValueCollection;
             if (config != null)
             {
                 // Add a stage for each entry in config
@@ -139,6 +139,13 @@ namespace EsccWebTeam.NavigationControls
             }
         }
 
+        /// <summary>
+        /// Gets or sets the name of the configuration section to read the progress bar from ('ProgressBar' by default).
+        /// </summary>
+        /// <value>
+        /// The name of the configuration section.
+        /// </value>
+        public string ConfigSectionName { get; set; } = "ProgressBar";
 
         /// <summary>
         /// Gets settings from web.config controlling the behaviour.
@@ -146,7 +153,7 @@ namespace EsccWebTeam.NavigationControls
         private void GetSettingsFromConfig()
         {
             // Get config: it's optional
-            NameValueCollection config = ConfigurationManager.GetSection("EsccWebTeam.NavigationControls/ProgressBarSettings") as NameValueCollection;
+            NameValueCollection config = ConfigurationManager.GetSection("EsccWebTeam.NavigationControls/" + ConfigSectionName + "Settings") as NameValueCollection;
             if (config != null)
             {
                 if (config["LinkCompletedStages"] != null) LinkCompletedStages = Convert.ToBoolean(config["LinkCompletedStages"], CultureInfo.CurrentCulture);
