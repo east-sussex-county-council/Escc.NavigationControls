@@ -99,6 +99,7 @@ namespace EsccWebTeam.NavigationControls
         {
             this.stages = new ProgressStageCollection();
             this.CurrentStage = 1;
+            ConfigSectionName = "ProgressBar";
         }
 
         /// <summary>
@@ -145,7 +146,7 @@ namespace EsccWebTeam.NavigationControls
         /// <value>
         /// The name of the configuration section.
         /// </value>
-        public string ConfigSectionName { get; set; } = "ProgressBar";
+        public string ConfigSectionName { get; set; }
 
         /// <summary>
         /// Gets settings from web.config controlling the behaviour.
