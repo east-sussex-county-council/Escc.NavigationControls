@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Globalization;
 using System.Text;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 
@@ -265,55 +266,18 @@ namespace EsccWebTeam.NavigationControls
                 string query = link.Substring(pos);
                 foreach (string name in this.parametersToPreserve)
                 {
-                    if (String.IsNullOrEmpty(Context.Request.QueryString[name])) query = RemoveParameter(query, name);
+                    if (String.IsNullOrEmpty(Context.Request.QueryString[name]))
+                    {
+                        var parsedQuery = HttpUtility.ParseQueryString(query);
+                        parsedQuery.Remove(name);
+                        query = "?" + parsedQuery;
+                    }
                 }
                 if (query.EndsWith("?", false, CultureInfo.InvariantCulture)) query = query.Substring(0, query.Length - 1);
                 if (query.EndsWith("&amp;", false, CultureInfo.InvariantCulture)) query = query.Substring(0, query.Length - 5);
                 link = link.Substring(0, pos) + query;
             }
             return link;
-        }
-
-        /// <summary>
-        /// Remove any existing parameter with a specified key from a given query string
-        /// </summary>
-        /// <param name="query">Existing query string</param>
-        /// <param name="parameterName">Parameter key</param>
-        /// <returns>Modified query string, beginning with "?"</returns>
-        [Obsolete("Need to update code to call EsccWebTeam.Data.Web.Iri.RemoveParameterFromQueryString")]
-        private static string RemoveParameter(string query, string parameterName)
-        {
-            if (query == null) throw new ArgumentNullException("query");
-
-            // if supplied querystring starts with ?, remove it
-            if (query.StartsWith("?")) query = query.Substring(1);
-
-            // split supplied querystring into sections
-            query = query.Replace("&amp;", "&");
-            string[] qsBits = query.Split('&');
-
-            //rebuild query string without its parameter= value
-            StringBuilder newQS = new StringBuilder();
-
-            for (int i = 0; i < qsBits.Length; i++)
-            {
-                string[] paramBits = qsBits[i].Split('=');
-
-                if ((paramBits[0] != parameterName) && (paramBits.Length > 1))
-                {
-                    if (newQS.Length > 0) newQS.Append("&amp;");
-                    newQS.Append(paramBits[0]).Append("=").Append(paramBits[1]);
-                }
-            }
-
-            // get querystring ready for new parameter
-            if (newQS.Length > 0) newQS.Append("&amp;");
-            else newQS.Append("?");
-
-            string completeQS = newQS.ToString();
-            if (!completeQS.StartsWith("?")) completeQS = "?" + completeQS;
-
-            return completeQS;
         }
 
         /// <summary> 

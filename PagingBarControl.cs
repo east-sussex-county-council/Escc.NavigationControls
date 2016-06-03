@@ -6,7 +6,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using EsccWebTeam.Data.Web;
 
 namespace EsccWebTeam.NavigationControls
 {
@@ -271,9 +270,9 @@ namespace EsccWebTeam.NavigationControls
             bool showLowerEllipses = false;
             StringBuilder navLinks = new StringBuilder();
 
-            var pageUrl = new Uri(this.PagingController.PageName + this.PagingController.QueryString, UriKind.RelativeOrAbsolute);
-            pageUrl = Iri.RemoveQueryStringParameter(pageUrl, "page");
-            var pageUrlReadyForParameter = HttpUtility.HtmlEncode(Iri.PrepareUrlForNewQueryStringParameter(pageUrl));
+            var query = HttpUtility.ParseQueryString(this.PagingController.QueryString);
+            query.Remove("page");
+            var pageUrlReadyForParameter = HttpUtility.HtmlEncode(this.PagingController.PageName + "?" + query + (query.Count > 0 ? "&" : String.Empty));
 
             string linkTemplate = "<a href=\"" + pageUrlReadyForParameter + "page={0}\">{0}</a>";
             const string linkEllipses = "&#8230;";

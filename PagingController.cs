@@ -5,8 +5,8 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
 using System.Globalization;
+using System.Web;
 using System.Web.UI;
-using EsccWebTeam.Data.Web;
 
 namespace EsccWebTeam.NavigationControls
 {
@@ -231,11 +231,17 @@ namespace EsccWebTeam.NavigationControls
             {
                 if (this.CurrentPage > 1)
                 {
-                    var url = Iri.RemoveQueryStringParameter(new Uri(this.PageName + this.QueryString, UriKind.RelativeOrAbsolute), "page");
-                    return new Uri(Iri.PrepareUrlForNewQueryStringParameter(Iri.MakeAbsolute(url)) + "page=" + (this.CurrentPage - 1).ToString(CultureInfo.CurrentCulture));
+                    return BuildPagingUrl("page=" + (this.CurrentPage - 1).ToString(CultureInfo.CurrentCulture));
                 }
                 else return null;
             }
+        }
+
+        private Uri BuildPagingUrl(string pageParameter)
+        {
+            var query = HttpUtility.ParseQueryString(this.QueryString);
+            query.Remove("page");
+            return new Uri(HttpContext.Current.Request.Url, this.PageName + "?" + query + (query.Count > 0 ? "&" : String.Empty));
         }
 
         /// <summary>
@@ -247,8 +253,7 @@ namespace EsccWebTeam.NavigationControls
             {
                 if (this.CurrentPage < this.TotalPages)
                 {
-                    var url = Iri.RemoveQueryStringParameter(new Uri(this.PageName + this.QueryString, UriKind.RelativeOrAbsolute), "page");
-                    return new Uri(Iri.PrepareUrlForNewQueryStringParameter(Iri.MakeAbsolute(url)) + "page=" + (this.CurrentPage + 1).ToString(CultureInfo.CurrentCulture));
+                    return BuildPagingUrl("page=" + (this.CurrentPage + 1).ToString(CultureInfo.CurrentCulture));
                 }
                 else return null;
 
