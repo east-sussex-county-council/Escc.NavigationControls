@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace EsccWebTeam.NavigationControls
+namespace Escc.NavigationControls.WebForms
 {
     /// <summary>
     /// A link to a file which includes file size and format information
@@ -122,12 +122,12 @@ namespace EsccWebTeam.NavigationControls
         /// <example><code>
         ///  &lt;configuration&gt;
         ///     &lt;configSections&gt;
-        ///         &lt;sectionGroup name=&quot;EsccWebTeam.NavigationControls&quot;&gt;
+        ///         &lt;sectionGroup name=&quot;Escc.NavigationControls.WebForms&quot;&gt;
         ///             &lt;section name=&quot;FileTypeNames&quot; type=&quot;System.Configuration.NameValueSectionHandler, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; requirePermission=&quot;false&quot; /&gt;
         ///         &lt;/sectionGroup&gt;
         ///     &lt;/configSections&gt;
         ///  
-        ///     &lt;EsccWebTeam.NavigationControls&gt;
+        ///     &lt;Escc.NavigationControls.WebForms&gt;
         ///        &lt;FileTypeNames&gt;
         ///          &lt;add key=&quot;pdf&quot; value=&quot;Adobe PDF&quot; /&gt;
         ///          &lt;add key=&quot;doc&quot; value=&quot;Word&quot; /&gt;
@@ -148,7 +148,7 @@ namespace EsccWebTeam.NavigationControls
         ///          &lt;add key=&quot;exe&quot; value=&quot;Computer program&quot; /&gt;
         ///          &lt;add key=&quot;zip&quot; value=&quot;ZIP of several files&quot; /&gt;
         ///        &lt;/FileTypeNames&gt;
-        ///     &lt;/EsccWebTeam.NavigationControls&gt;
+        ///     &lt;/Escc.NavigationControls.WebForms&gt;
         ///  &lt;/configuration&gt;
         /// </code></example>
         /// </remarks>
@@ -169,7 +169,8 @@ namespace EsccWebTeam.NavigationControls
         /// <remarks>See <see cref="ConvertExtensionToFileType(string,bool)"/>.</remarks>
         public static string ConvertExtensionToFileType(string extension)
         {
-            var fileTypeNames = ConfigurationManager.GetSection("EsccWebTeam.NavigationControls/FileTypeNames") as NameValueCollection;
+            var fileTypeNames = ConfigurationManager.GetSection("Escc.NavigationControls.WebForms/FileTypeNames") as NameValueCollection;
+            if (fileTypeNames == null) fileTypeNames = ConfigurationManager.GetSection("EsccWebTeam.NavigationControls/FileTypeNames") as NameValueCollection;
             if (fileTypeNames != null && fileTypeNames[extension] != null)
             {
                 return fileTypeNames[extension];

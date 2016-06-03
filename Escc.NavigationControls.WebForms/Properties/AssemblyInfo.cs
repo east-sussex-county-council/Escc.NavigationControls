@@ -1,21 +1,18 @@
-﻿using System.Configuration;
+﻿using System.Resources;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Security.Permissions;
-using System.Web;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NavigationControls")]
-[assembly: AssemblyDescription("Navigation controls for use on East Sussex County Council web pages")]
+[assembly: AssemblyTitle("Escc.NavigationControls.WebForms")]
+[assembly: AssemblyDescription("A library of common navigation controls for WebForms pages")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("East Sussex County Council")]
-[assembly: AssemblyProduct("NavigationControls")]
+[assembly: AssemblyProduct("Escc.NavigationControls.WebForms")]
 [assembly: AssemblyCopyright("Copyright © East Sussex County Council 2006")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("East Sussex County Council")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -42,3 +39,5 @@ using System.Web;
 
 // Recommended by FxCop
 [assembly: System.CLSCompliant(true)]
+[assembly: NeutralResourcesLanguage("en-GB")]
+

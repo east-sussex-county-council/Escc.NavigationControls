@@ -8,7 +8,7 @@ using System.Globalization;
 using System.Web;
 using System.Web.UI;
 
-namespace EsccWebTeam.NavigationControls
+namespace Escc.NavigationControls.WebForms
 {
     /// <summary>
     /// Facilitates paging result sets
@@ -20,7 +20,7 @@ namespace EsccWebTeam.NavigationControls
     /// <example>
     /// <para>You need to set the <see cref="PagingBarControl.PagingControllerId"/> attribute of each <see cref="PagingBarControl"/> on the page. All other attributes are optional.</para>
     /// <code>
-    /// &lt;%@ Register TagPrefix=&quot;NavigationControls&quot; Namespace=&quot;EsccWebTeam.NavigationControls&quot; Assembly=&quot;EsccWebTeam.NavigationControls&quot; %&gt;
+    /// &lt;%@ Register TagPrefix=&quot;NavigationControls&quot; Namespace=&quot;Escc.NavigationControls.WebForms&quot; Assembly=&quot;Escc.NavigationControls.WebForms&quot; %&gt;
     /// &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt;
     /// &lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; dir=&quot;ltr&quot; xml:lang=&quot;en&quot;&gt;
     /// 	&lt;body&gt;
@@ -50,19 +50,19 @@ namespace EsccWebTeam.NavigationControls
     ///	&lt;configuration&gt;
     ///
     ///		&lt;configSections&gt;
-    ///			&lt;sectionGroup name=&quot;EsccWebTeam.NavigationControls&quot;&gt;
+    ///			&lt;sectionGroup name=&quot;Escc.NavigationControls.WebForms&quot;&gt;
     ///				&lt;section name=&quot;Paging&quot; type=&quot;System.Configuration.NameValueSectionHandler, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; /&gt;
     ///			&lt;/sectionGroup&gt;
     ///		&lt;/configSections&gt;
     ///
     ///		&lt;location path=&quot;yourapplication&quot;&gt;
-    ///			&lt;EsccWebTeam.NavigationControls&gt;
+    ///			&lt;Escc.NavigationControls.WebForms&gt;
     ///
     ///				&lt;Paging&gt;
     ///					&lt;add key=&quot;PageSize&quot; value=&quot;20&quot; /&gt;
     ///				&lt;/Paging&gt;
     ///
-    ///			&lt;/EsccWebTeam.NavigationControls&gt;
+    ///			&lt;/Escc.NavigationControls.WebForms&gt;
     ///		&lt;/location&gt;
     ///	&lt;/configuration&gt;
     ///	</code>	
@@ -101,7 +101,8 @@ namespace EsccWebTeam.NavigationControls
         /// </summary>
         private void Initialise()
         {
-            this.pagingConfig = ConfigurationManager.GetSection("EsccWebTeam.NavigationControls/Paging") as NameValueCollection;
+            this.pagingConfig = ConfigurationManager.GetSection("Escc.NavigationControls.WebForms/Paging") as NameValueCollection;
+            if (this.pagingConfig == null) this.pagingConfig = ConfigurationManager.GetSection("EsccWebTeam.NavigationControls/Paging") as NameValueCollection;
 
             this.CurrentPage = 1;
             this.totalPages = 1;

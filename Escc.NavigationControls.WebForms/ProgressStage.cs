@@ -1,9 +1,9 @@
-
 using System;
-namespace EsccWebTeam.NavigationControls
+
+namespace Escc.NavigationControls.WebForms
 {
     /// <summary>
-    /// A stage on a <see cref="EsccWebTeam.NavigationControls.ProgressBarControl"/>.
+    /// A stage on a <see cref="ProgressBarControl"/>.
     /// </summary>
     public struct ProgressStage
     {

@@ -7,7 +7,7 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
-namespace EsccWebTeam.NavigationControls
+namespace Escc.NavigationControls.WebForms
 {
     /// <summary>
     /// An accessible paged navigation bar

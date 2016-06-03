@@ -1,4 +1,5 @@
 #region Using Directives
+
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -8,9 +9,10 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+
 #endregion
 
-namespace EsccWebTeam.NavigationControls
+namespace Escc.NavigationControls.WebForms
 {
     /// <summary>
     /// An A-Z list of links for alphabetical navigation

@@ -1,8 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace EsccWebTeam.NavigationControls
+namespace Escc.NavigationControls.WebForms
 {
 
 	/// <summary>

@@ -4,36 +4,35 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
 using System.Globalization;
-using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 
-namespace EsccWebTeam.NavigationControls
+namespace Escc.NavigationControls.WebForms
 {
     /// <summary>
     /// An indicator of the current stage in a multi-stage process
     /// </summary>
     /// <remarks>
-    /// <para>The stages of the progress bar are read from the <c>EsccWebTeam.NavigationControls/ProgressBar</c> section in <c>web.config</c>. 
+    /// <para>The stages of the progress bar are read from the <c>Escc.NavigationControls.WebForms/ProgressBar</c> section in <c>web.config</c>. 
     /// The keys become the stage labels. The values are not used by default.</para>
     /// <para>If you want the user to be able to click the progress bar to go back to previous stages, set the <see cref="LinkCompletedStages"/>
-    /// property to <c>true</c>. You can make this the default using the <c>EsccWebTeam.NavigationControls/ProgressBarSettings</c> section in <c>web.config</c>.
+    /// property to <c>true</c>. You can make this the default using the <c>Escc.NavigationControls.WebForms/ProgressBarSettings</c> section in <c>web.config</c>.
     /// If you enable this option, the URLs to link to must be entered as the values corresponding to the stage labels.</para>
     /// <para>If you need to pass parameters around between the pages, list the names of the parameters, spearated by semi-colons, in the <c>ParametersToPreserve</c>
-    /// property of the <c>EsccWebTeam.NavigationControls/ProgressBarSettings</c> section in <c>web.config</c>. The value of the first parameter listed here
+    /// property of the <c>Escc.NavigationControls.WebForms/ProgressBarSettings</c> section in <c>web.config</c>. The value of the first parameter listed here
     /// can be represented as <c>{0}</c> in page URLs, the second parameter as <c>{1}</c> and so on. These will be populated with the value from the current
     /// request at runtime. Note that ampersands in URLs should be double-encoded as <c>&amp;amp;amp;</c> to ensure they appear correctly in the final HTML.</para>
     /// <example><code>
     /// &lt;configuration&gt;
     ///   &lt;configSections&gt;
-    ///     &lt;sectionGroup name=&quot;EsccWebTeam.NavigationControls&quot;&gt;
+    ///     &lt;sectionGroup name=&quot;Escc.NavigationControls.WebForms&quot;&gt;
     ///       &lt;section name=&quot;ProgressBar&quot; type=&quot;System.Configuration.NameValueSectionHandler, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; /&gt;
     ///       &lt;section name=&quot;ProgressBarSettings&quot; type=&quot;System.Configuration.NameValueSectionHandler, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; /&gt;
     ///     &lt;/sectionGroup&gt;
     ///   &lt;/configSections&gt;
     /// 
-    ///   &lt;EsccWebTeam.NavigationControls&gt;
+    ///   &lt;Escc.NavigationControls.WebForms&gt;
     ///     &lt;ProgressBar&gt;
     ///       &lt;add key=&quot;Stage 1&quot; value=&quot;/example-application/stage1.aspx?example={0}&amp;amp;amp;id={1}&quot;/&gt;
     ///       &lt;add key=&quot;Stage 2&quot; value=&quot;/example-application/stage2.aspx?example={0}&amp;amp;amp;id={1}&quot;/&gt;
@@ -44,7 +43,7 @@ namespace EsccWebTeam.NavigationControls
     ///       &lt;add key=&quot;LinkFutureStages&quot; value=&quot;false&quot; /&gt;
     ///       &lt;add key=&quot;ParametersToPreserve&quot; value=&quot;example;id&quot; /&gt;
     ///     &lt;/ProgressBarSettings&gt;
-    ///   &lt;/EsccWebTeam.NavigationControls&gt;
+    ///   &lt;/Escc.NavigationControls.WebForms&gt;
     /// &lt;/configuration&gt;
     /// </code></example>
     /// </remarks>
@@ -120,8 +119,9 @@ namespace EsccWebTeam.NavigationControls
         /// </summary>
         private void GetStagesFromConfig()
         {
-            // Get config: it's optional
-            NameValueCollection config = ConfigurationManager.GetSection("EsccWebTeam.NavigationControls/" + ConfigSectionName) as NameValueCollection;
+            // Get config: it's optional. Fall back to older namespace.
+            NameValueCollection config = ConfigurationManager.GetSection("Escc.NavigationControls.WebForms/" + ConfigSectionName) as NameValueCollection;
+            if (config == null) config = ConfigurationManager.GetSection("EsccWebTeam.NavigationControls/" + ConfigSectionName) as NameValueCollection;
             if (config != null)
             {
                 // Add a stage for each entry in config
@@ -154,8 +154,9 @@ namespace EsccWebTeam.NavigationControls
         /// </summary>
         private void GetSettingsFromConfig()
         {
-            // Get config: it's optional
-            NameValueCollection config = ConfigurationManager.GetSection("EsccWebTeam.NavigationControls/" + ConfigSectionName + "Settings") as NameValueCollection;
+            // Get config: it's optional. Fall back to older namespace.
+            NameValueCollection config = ConfigurationManager.GetSection("Escc.NavigationControls.WebForms/" + ConfigSectionName + "Settings") as NameValueCollection;
+            if (config == null) config = ConfigurationManager.GetSection("EsccWebTeam.NavigationControls/" + ConfigSectionName + "Settings") as NameValueCollection;
             if (config != null)
             {
                 if (config["LinkCompletedStages"] != null) LinkCompletedStages = Convert.ToBoolean(config["LinkCompletedStages"], CultureInfo.CurrentCulture);
