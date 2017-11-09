@@ -274,10 +274,10 @@ namespace Escc.NavigationControls.WebForms
             query.Remove("page");
             var pageUrlReadyForParameter = HttpUtility.HtmlEncode(this.PagingController.PageName + "?" + query + (query.Count > 0 ? "&" : String.Empty));
 
-            string linkTemplate = "<a href=\"" + pageUrlReadyForParameter + "page={0}\">{0}</a>";
+            string linkTemplate = "<a href=\"" + pageUrlReadyForParameter + "page={0}\" class=\"screenUrl\">{0}</a>";
             const string linkEllipses = "&#8230;";
-            string linkPrev = "<a href=\"" + pageUrlReadyForParameter + "page={0}\">&lt; Prev</a> ";
-            string linkNext = " <a href=\"" + pageUrlReadyForParameter + "page={0}\">Next &gt;</a>";
+            string linkPrev = "<a href=\"" + pageUrlReadyForParameter + "page={0}\" class=\"screenUrl\">&lt; Prev</a> ";
+            string linkNext = " <a href=\"" + pageUrlReadyForParameter + "page={0}\" class=\"screenUrl\">Next &gt;</a>";
 
             // don't bother with page navigation if there's only one page
             if (totalPages > 1)
