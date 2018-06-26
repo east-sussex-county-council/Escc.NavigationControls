@@ -61,6 +61,34 @@ namespace Escc.NavigationControls.WebForms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)] // This makes it validate in Visual Studio 
         public ITemplate NoResultsTemplate { get; set; }
 
+        /// <summary>
+        /// Gets or sets whether first and last pages are numbered rather than being 'first' and 'last'.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if first and last pages are numbered; otherwise, <c>false</c>.
+        /// </value>
+        public bool FirstAndLastPagesAreNumbered { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets the text used to link to the first page.
+        /// </summary>
+        public string FirstPageText { get; set; } = "<< First";
+
+        /// <summary>
+        /// Gets or sets the text used to link to the previous page.
+        /// </summary>
+        public string PreviousPageText { get; set; } = "< Prev";
+
+        /// <summary>
+        /// Gets or sets the text used to link to the next page.
+        /// </summary>
+        public string NextPageText { get; set; } = "Next >";
+
+        /// <summary>
+        /// Gets or sets the text used to link to the last page.
+        /// </summary>
+        public string LastPageText { get; set; } = "Last >>";
+
         #endregion Public properties
 
         #region Constructors
@@ -71,7 +99,7 @@ namespace Escc.NavigationControls.WebForms
         public PagingBarControl()
             : base(HtmlTextWriterTag.Div)
         {
-            this.CssClass = "roundedBox infoBar";
+            this.CssClass = "infoBar";
         }
         #endregion Constructors
 
@@ -276,15 +304,22 @@ namespace Escc.NavigationControls.WebForms
 
             string linkTemplate = "<a href=\"" + pageUrlReadyForParameter + "page={0}\" class=\"screenUrl\">{0}</a>";
             const string linkEllipses = "&#8230;";
-            string linkPrev = "<a href=\"" + pageUrlReadyForParameter + "page={0}\" class=\"screenUrl\">&lt; Prev</a> ";
-            string linkNext = " <a href=\"" + pageUrlReadyForParameter + "page={0}\" class=\"screenUrl\">Next &gt;</a>";
+            string linkFirst = "<a href=\"" + pageUrlReadyForParameter + "page=1\" class=\"screenUrl\">" + HttpUtility.HtmlEncode(FirstPageText) + "</a> ";
+            string linkPrev = "<a href=\"" + pageUrlReadyForParameter + "page={0}\" class=\"screenUrl\">" + HttpUtility.HtmlEncode(PreviousPageText) + "</a> ";
+            string linkNext = " <a href=\"" + pageUrlReadyForParameter + "page={0}\" class=\"screenUrl\">" + HttpUtility.HtmlEncode(NextPageText) + "</a>";
+            string linkLast = " <a href=\"" + pageUrlReadyForParameter + "page={0}\" class=\"screenUrl\">" + HttpUtility.HtmlEncode(LastPageText) + "</a>";
 
             // don't bother with page navigation if there's only one page
             if (totalPages > 1)
             {
-                // render prev link
+                // render first & prev links
                 if (this.PagingController.CurrentPage > 1)
                 {
+                    if (!FirstAndLastPagesAreNumbered && this.PagingController.CurrentPage > 5)
+                    {
+                        navLinks.Append(linkFirst);
+                    }
+
                     navLinks.Append(String.Format(CultureInfo.CurrentCulture, linkPrev, (this.PagingController.CurrentPage - 1).ToString(CultureInfo.CurrentCulture)));
                 }
 
@@ -338,7 +373,7 @@ namespace Escc.NavigationControls.WebForms
                 {
                     navLinks.Append("<em>1</em> ");
                 }
-                else
+                else if (FirstAndLastPagesAreNumbered || this.PagingController.CurrentPage <= 5)
                 {
                     navLinks.Append(String.Format(CultureInfo.CurrentCulture, linkTemplate, "1"));
                     navLinks.Append(" ");
@@ -347,7 +382,7 @@ namespace Escc.NavigationControls.WebForms
                 // render Lower Ellipses
                 if (lower1 > 0)
                 {
-                    if (showLowerEllipses)
+                    if (showLowerEllipses && FirstAndLastPagesAreNumbered)
                     {
                         navLinks.Append(String.Format(CultureInfo.CurrentCulture, linkEllipses, (lower1 - 1).ToString(CultureInfo.CurrentCulture)));
                         navLinks.Append(" ");
@@ -379,7 +414,7 @@ namespace Escc.NavigationControls.WebForms
                         navLinks.Append(String.Format(CultureInfo.CurrentCulture, linkTemplate, i.ToString(CultureInfo.CurrentCulture)));
                         navLinks.Append(" ");
                     }
-                    if (showUpperEllipses)
+                    if (showUpperEllipses && FirstAndLastPagesAreNumbered)
                     {
                         if ((upper2 + 1) <= this.PagingController.AvailablePages)
                         {
@@ -402,7 +437,10 @@ namespace Escc.NavigationControls.WebForms
                     }
                     else
                     {
-                        navLinks.Append(String.Format(CultureInfo.CurrentCulture, linkTemplate, totalPages.ToString(CultureInfo.CurrentCulture)));
+                        if (FirstAndLastPagesAreNumbered || this.PagingController.CurrentPage >= (totalPages - 5))
+                        {
+                            navLinks.Append(String.Format(CultureInfo.CurrentCulture, linkTemplate, totalPages.ToString(CultureInfo.CurrentCulture)));
+                        }
                     }
                 }
 
@@ -410,6 +448,11 @@ namespace Escc.NavigationControls.WebForms
                 if (this.PagingController.CurrentPage < this.PagingController.AvailablePages)
                 {
                     navLinks.Append(String.Format(CultureInfo.CurrentCulture, linkNext, (this.PagingController.CurrentPage + 1).ToString(CultureInfo.CurrentCulture)));
+
+                    if (!FirstAndLastPagesAreNumbered && this.PagingController.CurrentPage <= this.PagingController.TotalPages-5)
+                    {
+                        navLinks.Append(String.Format(CultureInfo.CurrentCulture, linkLast, (this.PagingController.TotalPages).ToString(CultureInfo.CurrentCulture)));
+                    }
                 }
             }
 
